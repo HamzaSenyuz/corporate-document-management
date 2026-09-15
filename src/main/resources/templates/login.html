@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="tr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Giriş</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 380px; margin: 80px auto; padding: 20px; }
+        h1 { color: #2c3e50; font-size: 24px; }
+        label { display: block; margin-top: 15px; font-weight: bold; }
+        input { width: 100%; padding: 10px; margin-top: 5px; box-sizing: border-box; }
+        button { width: 100%; margin-top: 20px; padding: 12px; background: #3498db;
+                 color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 15px; }
+        button:hover { background: #2980b9; }
+        .error { background: #fadbd8; color: #c0392b; padding: 10px; border-radius: 4px; margin-top: 15px; }
+        .info  { background: #d5f4e6; color: #196f3d; padding: 10px; border-radius: 4px; margin-top: 15px; }
+        .hint  { margin-top: 25px; font-size: 13px; color: #7f8c8d; line-height: 1.6; }
+    </style>
+</head>
+<body>
+
+<h1>Doküman Yönetim Sistemi</h1>
+
+<div class="error" th:if="${param.error}">E-posta veya şifre hatalı.</div>
+<div class="info"  th:if="${param.logout}">Çıkış yapıldı.</div>
+
+<form method="post" th:action="@{/login}">
+    <label>E-posta</label>
+    <input type="email" name="username" required autofocus>
+
+    <label>Şifre</label>
+    <input type="password" name="password" required>
+
+    <button type="submit">Giriş Yap</button>
+</form>
+
+<div class="hint">
+    <strong>Test hesapları:</strong><br>
+    employee@test.com / 1234 (Çalışan)<br>
+    manager@test.com / 1234 (Yönetici)
+</div>
+
+</body>
+</html>

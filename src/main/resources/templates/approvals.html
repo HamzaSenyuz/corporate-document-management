@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="tr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Onay Bekleyenler</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 900px; margin: 40px auto; padding: 20px; }
+        h1 { color: #2c3e50; }
+        .card { border: 1px solid #ddd; border-radius: 6px; padding: 15px; margin-top: 15px; }
+        input[type=text] { width: 100%; padding: 8px; margin: 10px 0; box-sizing: border-box; }
+        button { padding: 8px 16px; border: none; border-radius: 3px; cursor: pointer; color: white; }
+        .approve { background: #27ae60; }
+        .reject { background: #e74c3c; }
+        a { color: #3498db; }
+    </style>
+</head>
+<body>
+
+<a href="/documents">← Doküman listesi</a>
+
+<h1>Onay Bekleyen Dokümanlar</h1>
+
+<div th:if="${versions.isEmpty()}">
+    <p>Onay bekleyen doküman yok.</p>
+</div>
+
+<div class="card" th:each="v : ${versions}">
+    <h3 th:text="${v.document.title} + '  (V' + ${v.versionNumber} + ')'"></h3>
+    <p>
+        <strong>Kategori:</strong> <span th:text="${v.document.category}"></span><br>
+        <strong>Dosya:</strong>
+        <a th:href="@{'/documents/versions/' + ${v.id} + '/download'}"
+           th:text="${v.originalFileName}"></a><br>
+        <strong>Yükleyen:</strong> <span th:text="${v.createdBy.name}"></span>
+    </p>
+
+    <form method="post" th:action="@{'/approvals/' + ${v.id}}">
+        <input type="text" name="comment" placeholder="Yorum (reddediyorsan sebebini yaz)">
+        <button class="approve" type="submit" name="decision" value="APPROVED">Onayla</button>
+        <button class="reject" type="submit" name="decision" value="REJECTED">Reddet</button>
+    </form>
+</div>
+
+</body>
+</html>

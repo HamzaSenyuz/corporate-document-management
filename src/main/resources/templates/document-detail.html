@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="tr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Doküman Detayı</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 900px; margin: 40px auto; padding: 20px; }
+        h1 { color: #2c3e50; }
+        h2 { color: #34495e; font-size: 20px; margin-top: 35px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+        th { background: #ecf0f1; }
+        .info { background: #ecf0f1; padding: 15px; border-radius: 6px; }
+        .info p { margin: 6px 0; }
+        .status { padding: 3px 8px; border-radius: 3px; font-size: 13px; color: white; }
+        .DRAFT { background: #95a5a6; }
+        .PENDING_REVIEW { background: #f39c12; }
+        .APPROVED { background: #27ae60; }
+        .REJECTED { background: #e74c3c; }
+        button { padding: 6px 12px; border: none; border-radius: 3px; cursor: pointer; }
+        .btn-submit { background: #f39c12; color: white; }
+        .btn-delete { background: #e74c3c; color: white; }
+        .upload-box { background: #f8f9fa; padding: 15px; border-radius: 6px; margin-top: 30px; }
+        a { color: #3498db; }
+    </style>
+</head>
+<body>
+
+<a href="/documents">← Listeye dön</a>
+
+<h1 th:text="${document.title}">Başlık</h1>
+
+<div class="info">
+    <p><strong>Kategori:</strong> <span th:text="${document.category}"></span></p>
+    <p><strong>Açıklama:</strong> <span th:text="${document.description}"></span></p>
+    <p><strong>Yükleyen:</strong> <span th:text="${document.createdBy.name}"></span></p>
+</div>
+
+<h2>Versiyonlar</h2>
+<table>
+    <thead>
+    <tr>
+        <th>Versiyon</th>
+        <th>Dosya</th>
+        <th>Durum</th>
+        <th>İşlem</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="v : ${versions}">
+        <td th:text="'V' + ${v.versionNumber}"></td>
+        <td>
+            <a th:href="@{'/documents/versions/' + ${v.id} + '/download'}"
+               th:text="${v.originalFileName}"></a>
+        </td>
+        <td>
+            <span class="status" th:classappend="${v.status.name()}"
+                  th:text="${v.status}"></span>
+        </td>
+        <td>
+            <form th:if="${v.status.name() == 'DRAFT'}" method="post" style="display:inline"
+                  th:action="@{'/documents/' + ${document.id} + '/versions/' + ${v.id} + '/submit'}">
+                <button class="btn-submit" type="submit">Onaya Gönder</button>
+            </form>
+
+            <form th:if="${v.status.name() == 'DRAFT'}" method="post" style="display:inline"
+                  th:action="@{'/documents/' + ${document.id} + '/versions/' + ${v.id} + '/delete'}"
+                  onsubmit="return confirm('Bu versiyon silinecek. Emin misin?');">
+                <button class="btn-delete" type="submit">Sil</button>
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<h2>Onay Geçmişi</h2>
+<table th:if="${!approvals.isEmpty()}">
+    <thead>
+    <tr>
+        <th>Versiyon</th>
+        <th>Karar</th>
+        <th>Yorum</th>
+        <th>Değerlendiren</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="a : ${approvals}">
+        <td th:text="'V' + ${a.version.versionNumber}"></td>
+        <td th:text="${a.decision}"></td>
+        <td th:text="${a.comment}"></td>
+        <td th:text="${a.reviewedBy.name}"></td>
+    </tr>
+    </tbody>
+</table>
+<p th:if="${approvals.isEmpty()}">Henüz bir karar verilmemiş.</p>
+
+<h2>Hareket Geçmişi</h2>
+<table th:if="${!logs.isEmpty()}">
+    <thead>
+    <tr>
+        <th>Tarih</th>
+        <th>Kullanıcı</th>
+        <th>İşlem</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="log : ${logs}">
+        <td th:text="${log.formattedDate}"></td>
+        <td th:text="${log.user.name}"></td>
+        <td th:text="${log.description}"></td>
+    </tr>
+    </tbody>
+</table>
+<p th:if="${logs.isEmpty()}">Kayıt yok.</p>
+
+<div class="upload-box">
+    <h3>Yeni Versiyon Yükle</h3>
+    <form method="post" enctype="multipart/form-data"
+          th:action="@{'/documents/' + ${document.id} + '/versions'}">
+        <input type="file" name="file" required>
+        <button type="submit">Yükle</button>
+    </form>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="tr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Doküman Yönetim Sistemi</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 700px; margin: 40px auto; padding: 20px; }
+        h1 { color: #2c3e50; }
+        .box { background: #ecf0f1; padding: 15px; border-radius: 8px; margin-top: 20px; }
+    </style>
+</head>
+<body>
+<h1>Doküman Yönetim Sistemi</h1>
+<p>Hoş geldin! Uygulama çalışıyor.</p>
+
+<div class="box">
+    <strong>Veritabanındaki kullanıcı sayısı:</strong>
+    <span th:text="${userCount}">0</span>
+</div>
+</body>
+</html>
