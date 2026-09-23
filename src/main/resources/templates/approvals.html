@@ -2,44 +2,43 @@
 <html lang="tr" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Onay Bekleyenler</title>
-    <style>
-        body { font-family: Arial, sans-serif; max-width: 900px; margin: 40px auto; padding: 20px; }
-        h1 { color: #2c3e50; }
-        .card { border: 1px solid #ddd; border-radius: 6px; padding: 15px; margin-top: 15px; }
-        input[type=text] { width: 100%; padding: 8px; margin: 10px 0; box-sizing: border-box; }
-        button { padding: 8px 16px; border: none; border-radius: 3px; cursor: pointer; color: white; }
-        .approve { background: #27ae60; }
-        .reject { background: #e74c3c; }
-        a { color: #3498db; }
-    </style>
+    <title>Onay Bekleyenler — Doküman Yönetimi</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
 
-<a href="/documents">← Doküman listesi</a>
+<nav th:replace="~{fragments :: navbar}"></nav>
 
-<h1>Onay Bekleyen Dokümanlar</h1>
+<main class="container">
+    <h1>Onay Bekleyen Dokümanlar</h1>
+    <p class="page-sub">İncelemeniz için gönderilen versiyonlar</p>
 
-<div th:if="${versions.isEmpty()}">
-    <p>Onay bekleyen doküman yok.</p>
-</div>
+    <div class="card" th:if="${versions.isEmpty()}">
+        <p class="empty">Onay bekleyen doküman yok.</p>
+    </div>
 
-<div class="card" th:each="v : ${versions}">
-    <h3 th:text="${v.document.title} + '  (V' + ${v.versionNumber} + ')'"></h3>
-    <p>
-        <strong>Kategori:</strong> <span th:text="${v.document.category}"></span><br>
-        <strong>Dosya:</strong>
-        <a th:href="@{'/documents/versions/' + ${v.id} + '/download'}"
-           th:text="${v.originalFileName}"></a><br>
-        <strong>Yükleyen:</strong> <span th:text="${v.createdBy.name}"></span>
-    </p>
+    <div class="card" th:each="v : ${versions}">
+        <h3 th:text="${v.document.title} + '  ·  V' + ${v.versionNumber}"></h3>
+        <dl class="info-grid" style="margin:12px 0 16px;">
+            <dt>Kategori</dt><dd th:text="${v.document.category}"></dd>
+            <dt>Dosya</dt>
+            <dd>
+                <a th:href="@{'/documents/versions/' + ${v.id} + '/download'}"
+                   th:text="${v.originalFileName}"></a>
+            </dd>
+            <dt>Yükleyen</dt><dd th:text="${v.createdBy.name}"></dd>
+        </dl>
 
-    <form method="post" th:action="@{'/approvals/' + ${v.id}}">
-        <input type="text" name="comment" placeholder="Yorum (reddediyorsan sebebini yaz)">
-        <button class="approve" type="submit" name="decision" value="APPROVED">Onayla</button>
-        <button class="reject" type="submit" name="decision" value="REJECTED">Reddet</button>
-    </form>
-</div>
+        <form method="post" th:action="@{'/approvals/' + ${v.id}}">
+            <input type="text" name="comment" placeholder="Yorum (reddediyorsanız gerekçe yazın)">
+            <div style="display:flex; gap:10px; margin-top:14px;">
+                <button class="btn btn-success" type="submit" name="decision" value="APPROVED">Onayla</button>
+                <button class="btn btn-danger"  type="submit" name="decision" value="REJECTED">Reddet</button>
+            </div>
+        </form>
+    </div>
+
+</main>
 
 </body>
 </html>

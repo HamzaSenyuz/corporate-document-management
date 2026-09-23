@@ -2,51 +2,51 @@
 <html lang="tr" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
-  <title>Arşiv</title>
-  <style>
-    body { font-family: Arial, sans-serif; max-width: 900px; margin: 40px auto; padding: 20px; }
-    h1 { color: #2c3e50; }
-    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-    th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
-    th { background: #ecf0f1; }
-    button { padding: 6px 12px; border: none; border-radius: 3px; cursor: pointer;
-             background: #16a085; color: white; }
-    .empty { color: #7f8c8d; margin-top: 20px; }
-    a { color: #3498db; }
-  </style>
+  <title>Arşiv — Doküman Yönetimi</title>
+  <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
 
-<a href="/documents">← Aktif dokümanlar</a>
+<nav th:replace="~{fragments :: navbar}"></nav>
 
-<h1>Arşiv</h1>
+<main class="container">
+  <h1>Arşiv</h1>
+  <p class="page-sub">Arşive taşınmış dokümanlar</p>
 
-<table th:if="${!documents.isEmpty()}">
-  <thead>
-  <tr>
-    <th>ID</th>
-    <th>Başlık</th>
-    <th>Kategori</th>
-    <th>Yükleyen</th>
-    <th>İşlem</th>
-  </tr>
-  </thead>
-  <tbody>
-  <tr th:each="doc : ${documents}">
-    <td th:text="${doc.id}"></td>
-    <td><a th:href="@{'/documents/' + ${doc.id}}" th:text="${doc.title}"></a></td>
-    <td th:text="${doc.category}"></td>
-    <td th:text="${doc.createdBy.name}"></td>
-    <td>
-      <form method="post" th:action="@{'/documents/' + ${doc.id} + '/unarchive'}">
-        <button type="submit">Arşivden Çıkar</button>
-      </form>
-    </td>
-  </tr>
-  </tbody>
-</table>
+  <div class="card tight" th:if="${!documents.isEmpty()}">
+    <div class="table-wrap">
+      <table>
+        <thead>
+        <tr>
+          <th style="width:60px;">ID</th>
+          <th>Başlık</th>
+          <th style="width:140px;">Kategori</th>
+          <th style="width:160px;">Yükleyen</th>
+          <th style="width:160px;">İşlem</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="doc : ${documents}">
+          <td th:text="${doc.id}"></td>
+          <td><a th:href="@{'/documents/' + ${doc.id}}" th:text="${doc.title}"></a></td>
+          <td th:text="${doc.category}"></td>
+          <td th:text="${doc.createdBy.name}"></td>
+          <td>
+            <form method="post" th:action="@{'/documents/' + ${doc.id} + '/unarchive'}">
+              <button class="btn btn-ghost btn-sm" type="submit">Arşivden Çıkar</button>
+            </form>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
 
-<p class="empty" th:if="${documents.isEmpty()}">Arşivde doküman yok.</p>
+  <div class="card" th:if="${documents.isEmpty()}">
+    <p class="empty">Arşivde doküman yok.</p>
+  </div>
+
+</main>
 
 </body>
 </html>

@@ -2,45 +2,50 @@
 <html lang="tr" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
-  <title>Sistem Hareketleri</title>
-  <style>
-    body { font-family: Arial, sans-serif; max-width: 900px; margin: 40px auto; padding: 20px; }
-    h1 { color: #2c3e50; }
-    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-    th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
-    th { background: #ecf0f1; }
-    a { color: #3498db; }
-  </style>
+  <title>Sistem Hareketleri — Doküman Yönetimi</title>
+  <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
 
-<a href="/documents">← Doküman listesi</a>
+<nav th:replace="~{fragments :: navbar}"></nav>
 
-<h1>Sistem Hareketleri</h1>
+<main class="container">
+  <h1>Sistem Hareketleri</h1>
+  <p class="page-sub">Son 50 işlem</p>
 
-<table th:if="${!logs.isEmpty()}">
-  <thead>
-  <tr>
-    <th>Tarih</th>
-    <th>Kullanıcı</th>
-    <th>Doküman</th>
-    <th>İşlem</th>
-  </tr>
-  </thead>
-  <tbody>
-  <tr th:each="log : ${logs}">
-    <td th:text="${log.formattedDate}"></td>
-    <td th:text="${log.user.name}"></td>
-    <td>
-      <a th:if="${log.document != null}"
-         th:href="@{'/documents/' + ${log.document.id}}"
-         th:text="${log.document.title}"></a>
-    </td>
-    <td th:text="${log.description}"></td>
-  </tr>
-  </tbody>
-</table>
-<p th:if="${logs.isEmpty()}">Henüz hareket yok.</p>
+  <div class="card tight" th:if="${!logs.isEmpty()}">
+    <div class="table-wrap">
+      <table>
+        <thead>
+        <tr>
+          <th style="width:150px;">Tarih</th>
+          <th style="width:170px;">Kullanıcı</th>
+          <th style="width:180px;">Doküman</th>
+          <th>İşlem</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="log : ${logs}">
+          <td th:text="${log.formattedDate}"></td>
+          <td th:text="${log.user.name}"></td>
+          <td>
+            <a th:if="${log.document != null}"
+               th:href="@{'/documents/' + ${log.document.id}}"
+               th:text="${log.document.title}"></a>
+            <span th:if="${log.document == null}" style="color:var(--text-muted);">—</span>
+          </td>
+          <td th:text="${log.description}"></td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card" th:if="${logs.isEmpty()}">
+    <p class="empty">Henüz hareket yok.</p>
+  </div>
+
+</main>
 
 </body>
 </html>

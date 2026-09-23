@@ -19,9 +19,10 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/login").permitAll()          // login sayfası herkese açık
-                        .requestMatchers("/approvals/**").hasRole("MANAGER")  // sadece yönetici
-                        .anyRequest().authenticated()                   // geri kalan her şey giriş ister
+                        .requestMatchers("/login").permitAll()
+                        .requestMatchers("/css/**", "/js/**", "/images/**").permitAll()   // ← YENİ
+                        .requestMatchers("/approvals/**").hasRole("MANAGER")
+                        .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
                         .loginPage("/login")                  // kendi login sayfamız

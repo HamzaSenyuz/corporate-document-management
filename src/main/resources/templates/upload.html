@@ -2,42 +2,42 @@
 <html lang="tr" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Doküman Yükle</title>
-    <style>
-        body { font-family: Arial, sans-serif; max-width: 600px; margin: 40px auto; padding: 20px; }
-        h1 { color: #2c3e50; }
-        label { display: block; margin-top: 15px; font-weight: bold; }
-        input, textarea, select { width: 100%; padding: 8px; margin-top: 5px; box-sizing: border-box; }
-        button { margin-top: 20px; padding: 10px 20px; background: #3498db; color: white;
-                 border: none; border-radius: 4px; cursor: pointer; font-size: 15px; }
-        button:hover { background: #2980b9; }
-        a { display: inline-block; margin-top: 20px; color: #3498db; }
-    </style>
+    <title>Yeni Doküman — Doküman Yönetimi</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
-<h1>Yeni Doküman Yükle</h1>
 
-<form method="post" th:action="@{/documents/upload}" enctype="multipart/form-data">
-    <label>Başlık</label>
-    <input type="text" name="title" required>
+<nav th:replace="~{fragments :: navbar}"></nav>
 
-    <label>Açıklama</label>
-    <textarea name="description" rows="3"></textarea>
+<main class="container">
+    <a class="back-link" href="/documents">← Doküman listesi</a>
 
-    <label>Kategori</label>
-    <select name="category" required>
-        <option value="Sözleşme">Sözleşme</option>
-        <option value="Fatura">Fatura</option>
-        <option value="Rapor">Rapor</option>
-        <option value="Diğer">Diğer</option>
-    </select>
+    <h1>Yeni Doküman</h1>
+    <p class="page-sub">Bir dosya yükleyin; ilk versiyon (V1) otomatik oluşturulur.</p>
 
-    <label>Dosya</label>
-    <input type="file" name="file" required>
+    <div class="card" style="max-width:560px;">
+        <form method="post" th:action="@{/documents/upload}" enctype="multipart/form-data">
+            <label>Başlık</label>
+            <input type="text" name="title" required>
 
-    <button type="submit">Yükle</button>
-</form>
+            <label>Açıklama</label>
+            <textarea name="description" rows="3"></textarea>
 
-<a href="/documents">← Doküman listesine dön</a>
+            <label>Kategori</label>
+            <select name="category" required>
+                <option value="Sözleşme">Sözleşme</option>
+                <option value="Fatura">Fatura</option>
+                <option value="Rapor">Rapor</option>
+                <option value="Diğer">Diğer</option>
+            </select>
+
+            <label>Dosya</label>
+            <input type="file" name="file" required>
+
+            <button class="btn" type="submit" style="margin-top:22px;">Yükle</button>
+        </form>
+    </div>
+</main>
+
 </body>
 </html>

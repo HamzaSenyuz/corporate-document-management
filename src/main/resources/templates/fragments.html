@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="tr" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<body>
+
+<nav class="navbar" th:fragment="navbar">
+  <div style="display:flex; align-items:center;">
+    <a class="brand" href="/documents">
+      <span class="logo">📄</span>
+      Doküman Yönetimi
+    </a>
+    <div class="nav-links">
+      <a href="/documents">Dokümanlar</a>
+      <a href="/approvals" sec:authorize="hasRole('MANAGER')">Onay Bekleyenler</a>
+      <a href="/activity">Hareket Geçmişi</a>
+      <a href="/documents/archived">Arşiv</a>
+    </div>
+  </div>
+  <div class="nav-user">
+        <span class="who">
+            <strong sec:authentication="name">kullanıcı</strong>
+            <span class="role-tag" sec:authorize="hasRole('MANAGER')">Yönetici</span>
+            <span class="role-tag" sec:authorize="hasRole('EMPLOYEE')">Çalışan</span>
+        </span>
+    <form method="post" th:action="@{/logout}" style="margin:0;">
+      <button class="btn btn-logout" type="submit">Çıkış</button>
+    </form>
+  </div>
+</nav>
+
+</body>
+</html>
