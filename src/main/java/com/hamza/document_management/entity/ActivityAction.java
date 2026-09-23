@@ -5,5 +5,7 @@ public enum ActivityAction {
     VERSION_UPLOADED,
     SUBMITTED_FOR_REVIEW,
     APPROVED,
-    REJECTED
+    REJECTED,
+    ARCHIVED,
+    UNARCHIVED
 }

@@ -13,6 +13,8 @@
         .btn { display: inline-block; padding: 10px 20px; background: #27ae60; color: white;
                text-decoration: none; border-radius: 4px; margin-right: 8px; }
         .btn-orange { background: #f39c12; }
+        .btn-purple { background: #8e44ad; }
+        .btn-gray { background: #7f8c8d; }
         .empty { color: #7f8c8d; margin-top: 20px; }
         a { color: #3498db; }
         .topbar { display: flex; justify-content: space-between; align-items: center;
@@ -35,11 +37,15 @@
     </form>
 </div>
 
+<div th:if="${error}" style="background:#fadbd8; color:#c0392b; padding:12px 16px;
+     border-radius:6px; margin-bottom:16px;" th:text="${error}"></div>
+
 <h1>Dokümanlar</h1>
 
 <a class="btn" href="/documents/upload">+ Yeni Doküman</a>
 <a class="btn btn-orange" href="/approvals" sec:authorize="hasRole('MANAGER')">Onay Bekleyenler</a>
-<a class="btn" href="/activity" style="background:#8e44ad;">Hareket Geçmişi</a>
+<a class="btn btn-purple" href="/activity">Hareket Geçmişi</a>
+<a class="btn btn-gray" href="/documents/archived">Arşiv</a>
 
 <table th:if="${!documents.isEmpty()}">
     <thead>

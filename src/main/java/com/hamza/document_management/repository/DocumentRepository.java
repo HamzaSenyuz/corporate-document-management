@@ -15,4 +15,6 @@ public interface DocumentRepository extends JpaRepository<Document, Long> {
 
     // Tüm aktif dokümanlar (Manager/Admin için)
     List<Document> findByArchivedFalse();
+
+    List<Document> findByArchivedTrue();
 }

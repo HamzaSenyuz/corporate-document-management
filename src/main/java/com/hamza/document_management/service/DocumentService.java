@@ -151,4 +151,35 @@ public class DocumentService {
                     "V" + version.getVersionNumber() + " silindi");
         }
     }
+    /** Dokümanı arşivle — sadece sahibi yapabilir */
+    @Transactional
+    public void archiveDocument(Long documentId, User currentUser) {
+        Document document = documentRepository.findById(documentId)
+                .orElseThrow(() -> new RuntimeException("Dokuman bulunamadi"));
+
+        if (!document.getCreatedBy().getId().equals(currentUser.getId())) {
+            throw new RuntimeException("Sadece kendi dokumanini arsivleyebilirsin");
+        }
+
+        document.archive();
+        documentRepository.save(document);
+
+        log(document, currentUser, ActivityAction.ARCHIVED, "Doküman arşivlendi");
+    }
+
+    /** Arşivden çıkar */
+    @Transactional
+    public void unarchiveDocument(Long documentId, User currentUser) {
+        Document document = documentRepository.findById(documentId)
+                .orElseThrow(() -> new RuntimeException("Dokuman bulunamadi"));
+
+        if (!document.getCreatedBy().getId().equals(currentUser.getId())) {
+            throw new RuntimeException("Sadece kendi dokumanini geri alabilirsin");
+        }
+
+        document.unarchive();
+        documentRepository.save(document);
+
+        log(document, currentUser, ActivityAction.UNARCHIVED, "Doküman arşivden çıkarıldı");
+    }
 }

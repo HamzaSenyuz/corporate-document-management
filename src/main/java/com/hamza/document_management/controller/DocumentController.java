@@ -18,6 +18,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -121,6 +122,34 @@ public class DocumentController {
                 .header(HttpHeaders.CONTENT_DISPOSITION,
                         "attachment; filename=\"" + version.getOriginalFileName() + "\"")
                 .body(resource);
+    }
+    /** GET /documents/archived -> arşivlenmiş dokümanlar */
+    @GetMapping("/archived")
+    public String archived(Model model) {
+        model.addAttribute("documents", documentRepository.findByArchivedTrue());
+        return "archived";
+    }
+
+    /** POST /documents/5/archive */
+    @PostMapping("/{id}/archive")
+    public String archive(@PathVariable Long id, Principal principal, RedirectAttributes ra) {
+        try {
+            documentService.archiveDocument(id, currentUser(principal));
+        } catch (RuntimeException e) {
+            ra.addFlashAttribute("error", e.getMessage());
+        }
+        return "redirect:/documents";
+    }
+
+    /** POST /documents/5/unarchive */
+    @PostMapping("/{id}/unarchive")
+    public String unarchive(@PathVariable Long id, Principal principal, RedirectAttributes ra) {
+        try {
+            documentService.unarchiveDocument(id, currentUser(principal));
+        } catch (RuntimeException e) {
+            ra.addFlashAttribute("error", e.getMessage());
+        }
+        return "redirect:/documents/archived";
     }
 
     /** Giriş yapmış kullanıcıyı veritabanından getirir */
